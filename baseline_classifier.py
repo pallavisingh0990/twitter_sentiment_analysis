@@ -78,22 +78,30 @@ class BaselineClassifier:
             tw = self.tweets[i]
             count = 0
             res = {}
+            total =0
+            trackp=0
+            trackng=0
+            trackne=0
             for t in tw:
                 neg_words = [word for word in negative_words if(self.string_found(word, t))]
                 pos_words = [word for word in positive_words if(self.string_found(word, t))]
                 if(len(pos_words) > len(neg_words)):
                     label = 'positive'
                     self.pos_count[i] += 1
+                    trackp =trackp+1
                 elif(len(pos_words) < len(neg_words)):
                     label = 'negative'
                     self.neg_count[i] += 1
+                    trackng =trackng+1
                 else:
                     if(len(pos_words) > 0 and len(neg_words) > 0):
                         label = 'positive'
                         self.pos_count[i] += 1
+                        trackp =trackp+1
                     else:
                         label = 'neutral'
                         self.neut_count[i] += 1
+                        trackne =trackne+1
                 result = {'text': t, 'tweet': self.origTweets[i][count], 'label': label}
                 res[count] = result                
                 count += 1         
@@ -104,6 +112,11 @@ class BaselineClassifier:
         outfile = open(filename, 'wb')        
         pickle.dump(self.results, outfile)        
         outfile.close()
+        total = trackp+trackne+trackng
+        print "Positive : ",trackp
+        print "Neutral : ",trackne
+        print "Negative : ",trackng
+        print "Total : ",total
         '''
         inpfile = open('data/results_lastweek.pickle')
         self.results = pickle.load(inpfile)

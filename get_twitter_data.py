@@ -7,6 +7,7 @@ import random
 import os
 import pickle
 from datetime import timedelta
+import oauth
 import oauth2
 
 class TwitterData:
